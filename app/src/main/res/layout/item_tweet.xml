@@ -31,6 +31,8 @@
 
     <TextView
         android:id="@+id/tvBody"
+        android:linksClickable="true"
+        android:autoLink="all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvScreenName"
