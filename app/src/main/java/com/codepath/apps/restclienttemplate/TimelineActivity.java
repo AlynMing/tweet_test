@@ -23,6 +23,8 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity {
 
     public static final String TAG = "TimelineActivity";
+    public static final int TRUNCATED = 0;
+    public static final int FULL = 1;
     TwitterClient client;
     RecyclerView rvTweets;
     List<Tweet> tweets;

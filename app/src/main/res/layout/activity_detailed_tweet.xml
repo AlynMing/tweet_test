@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:id="@+id/rvTweet"
->
+    android:layout_margin="5dp">
 
     <ImageView
         android:id="@+id/ivProfile"
@@ -22,42 +20,39 @@
         android:layout_toEndOf="@+id/ivProfile"
         android:textColor="@android:color/secondary_text_light"
         tools:text="Abcdef" />
+
     <TextView
         android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_below="@+id/tvName"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_toEndOf="@+id/ivProfile"
         android:textColor="@android:color/secondary_text_dark"
-        android:layout_toEndOf="@+id/tvName"
         tools:text="\@asddasdsa" />
 
-    <com.codepath.apps.restclienttemplate.LinkifyTextView
+    <TextView
         android:id="@+id/tvBody"
-        android:linksClickable="true"
+        android:layout_width="384dp"
+        android:layout_height="504dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_marginTop="7dp"
         android:autoLink="all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvScreenName"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
-        android:layout_toEndOf="@+id/ivProfile"
+        android:linksClickable="true"
         tools:text="This is sample tweet" />
 
     <TextView
         android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
+        android:layout_width="202dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvScreenName"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="194dp"
         android:textSize="12sp"
         tools:text="-37s" />
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBody"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="16dp"
-        tools:srcCompat="@tools:sample/avatars" />
 </RelativeLayout>

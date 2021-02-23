@@ -1,10 +1,14 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
+import android.text.SpannableString;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,10 +17,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
+    private void fixTextView(TextView tv) {
+        SpannableString current = (SpannableString) tv.getText();
+        URLSpan[] spans =
+                current.getSpans(0, current.length(), URLSpan.class);
 
+        for (URLSpan span : spans) {
+            int start = current.getSpanStart(span);
+            int end = current.getSpanEnd(span);
+
+            current.removeSpan(span);
+            current.setSpan(new DefensiveURLSpan(span.getURL()), start, end,
+                    0);
+        }
+    }
+    public static class DefensiveURLSpan extends URLSpan {
+        private String mUrl;
+
+        public DefensiveURLSpan(String url) {
+            super(url);
+            mUrl = url;
+        }
+
+        @Override
+        public void onClick(View widget) {
+            // openInWebView(widget.getContext(), mUrl); // intercept click event and do something.
+            // super.onClick(widget); // or it will do as it is.
+        }
+    }
     Context context;
     List<Tweet> tweets;
 
@@ -58,10 +91,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivProfileImage;
-        TextView tvBody;
+        LinkifyTextView tvBody;
         TextView tvScreenName;
         TextView tvName;
         TextView tvDate;
+        RelativeLayout container;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,15 +104,24 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvName = itemView.findViewById(R.id.tvName);
             tvDate = itemView.findViewById(R.id.tvDate);
+            container = itemView.findViewById(R.id.rvTweet);
         }
 
-        public void bind(Tweet tweet) {
+
+        public void bind(final Tweet tweet) {
             tvBody.setText(tweet.body);
             tvScreenName.setText(context.getString(R.string.screen_name, tweet.user.name));
             tvName.setText(tweet.user.name);
             tvDate.setText(tweet.getTimestamp());
             Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
-
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, DetailedTweet.class);
+                    i.putExtra("tweet", Parcels.wrap(tweet));
+                    context.startActivity(i);
+                }
+            });
         }
     }
 }

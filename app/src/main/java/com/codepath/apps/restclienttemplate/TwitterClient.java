@@ -9,6 +9,8 @@ import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
 
+import java.util.Locale;
+
 /*
  * 
  * This is the object responsible for communicating with a REST API. 
@@ -50,6 +52,16 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("since_id", 1);
+		client.get(apiUrl, params, handler);
+	}
+
+	public void getTweet(JsonHttpResponseHandler handler, long id)
+	{
+		String apiUrl = getApiUrl("statuses/show.json");
+
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		params.put("tweet_mode", "extended");
 		client.get(apiUrl, params, handler);
 	}
 
