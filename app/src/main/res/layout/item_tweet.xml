@@ -13,12 +13,21 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvScreenName"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@+id/ivProfile"
-        tools:text="asddasdsa" />
+        android:textColor="@android:color/secondary_text_light"
+        tools:text="Abcdef" />
+    <TextView
+        android:id="@+id/tvScreenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="@android:color/secondary_text_dark"
+        android:layout_toEndOf="@+id/tvName"
+        tools:text="\@asddasdsa" />
 
     <TextView
         android:id="@+id/tvBody"
@@ -29,4 +38,12 @@
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivProfile"
         tools:text="This is sample tweet" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:textSize="12sp"
+        tools:text="-37s" />
 </RelativeLayout>
