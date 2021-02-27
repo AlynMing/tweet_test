@@ -7,13 +7,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.room.DatabaseConfiguration;
+import androidx.room.InvalidationTracker;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
+
 import com.codepath.apps.restclienttemplate.models.SampleModel;
 import com.codepath.apps.restclienttemplate.models.SampleModelDao;
+import com.codepath.apps.restclienttemplate.models.TweetDB;
+import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
-	SampleModelDao sampleModelDao;
+	//SampleModelDao sampleModelDao;
+	public static TweetDao tweetDao;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +31,16 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		final SampleModel sampleModel = new SampleModel();
 		sampleModel.setName("CodePath");
 
-		sampleModelDao = ((TwitterApp) getApplicationContext()).getMyDatabase().sampleModelDao();
+		//sampleModelDao = ((TwitterApp) getApplicationContext()).getMyDatabase().sampleModelDao();
+		tweetDao = ((TwitterApp) getApplicationContext()).getTweetDb().tweetDao();
 
-		AsyncTask.execute(new Runnable() {
-			@Override
-			public void run() {
-				sampleModelDao.insertModel(sampleModel);
-			}
-		});
+
+		//AsyncTask.execute(new Runnable() {
+		//	@Override
+		//	public void run() {
+		//		sampleModelDao.insertModel(sampleModel);
+		//	}
+		//});
 	}
 
 

@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.style.URLSpan;
 import android.view.LayoutInflater;
@@ -84,7 +85,17 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     public void addAll(List<Tweet> tweetList)
     {
-        tweets.addAll(tweetList);
+        for(final Tweet item : tweetList)
+        {
+            tweets.add(item);
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    LoginActivity.tweetDao.insertTweet(item);
+                    LoginActivity.tweetDao.insertUser(item.user);
+                }
+            });
+        }
         notifyDataSetChanged();
     }
 

@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.github.scribejava.apis.TwitterApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -112,7 +111,7 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.i(TAG, "failure", throwable);
+                Log.i(TAG, "failure" + response, throwable);
             }
         });
     }
