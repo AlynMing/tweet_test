@@ -16,8 +16,11 @@ public interface TweetDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public Long insertTweet(Tweet tweet);
 
-    @Query("SELECT * FROM Tweet ORDER BY ID DESC LIMIT 50")
-    List<SampleModel> recentTweets();
+    //@Query("SELECT * FROM Tweet ORDER BY ID DESC LIMIT 50")
+    //List<SampleModel> recentTweets();
+
+    @Query("SELECT * FROM User INNER JOIN Tweet ON User.userId == Tweet.userId")
+    public List<Tweet> getTweets();
 
     @Delete
     public void deleteTweet(Tweet tweet);

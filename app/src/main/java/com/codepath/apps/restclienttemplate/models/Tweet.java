@@ -1,8 +1,11 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.annotation.SuppressLint;
+
 import com.codepath.apps.restclienttemplate.TimeFormatter;
 import com.codepath.apps.restclienttemplate.TimelineActivity;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import androidx.room.ColumnInfo;
 import androidx.room.Dao;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -25,13 +29,13 @@ public class Tweet {
     @ColumnInfo
     public String createdAt;
     @ColumnInfo
-    public long userId;
+    public long tweetUserId;
 
     @ColumnInfo
     @PrimaryKey(autoGenerate = true)
     public long id;
 
-    @Ignore
+    @Embedded
     public User user;
 
     public Tweet(){}
@@ -41,7 +45,7 @@ public class Tweet {
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
-        tweet.userId = tweet.user.userId;
+        tweet.tweetUserId = tweet.user.userId;
         tweet.id = jsonObject.getLong("id");
         return  tweet;
     }
@@ -54,6 +58,15 @@ public class Tweet {
     public  String getFullTime()
     {
         return  TimeFormatter.getTimeStamp(createdAt);
+    }
+
+
+    @SuppressLint("DefaultLocale")
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return  String.format("%s, %d", this.user.name, this.id);
     }
 
     public static List<Tweet> fromJsonArray(JSONArray jsonArray) throws JSONException {

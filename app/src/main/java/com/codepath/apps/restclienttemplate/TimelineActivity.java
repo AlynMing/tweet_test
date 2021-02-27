@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -30,6 +32,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener scrollListener;
+    List<Tweet> t1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,14 @@ public class TimelineActivity extends AppCompatActivity {
                 try {
                     List<Tweet> tweets = Tweet.fromJsonArray(jsonArray);
                     adapter.addAll(tweets);
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                             t1 = LoginActivity.tweetDao.getTweets();
+                             Log.i("sqlite_info", t1.get(0).toString());
+                        };
+                    });
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
