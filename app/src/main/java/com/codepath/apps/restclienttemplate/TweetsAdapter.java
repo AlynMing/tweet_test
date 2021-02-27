@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.style.URLSpan;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -101,6 +103,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivProfileImage;
+        VideoView vvTweetvideo;
         LinkifyTextView tvBody;
         TextView tvScreenName;
         TextView tvName;
@@ -114,6 +117,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvName = itemView.findViewById(R.id.tvName);
             tvDate = itemView.findViewById(R.id.tvDate);
+            vvTweetvideo = itemView.findViewById(R.id.vvTweetvideo);
             container = itemView.findViewById(R.id.rvTweet);
         }
 
@@ -123,6 +127,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName.setText(context.getString(R.string.screen_name, tweet.user.name));
             tvName.setText(tweet.user.name);
             tvDate.setText(tweet.getTimestamp());
+            if(tweet.videoUrl.size() != 0) {
+                vvTweetvideo.setVideoURI(Uri.parse(tweet.videoUrl.get(0)));
+            }
             Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
