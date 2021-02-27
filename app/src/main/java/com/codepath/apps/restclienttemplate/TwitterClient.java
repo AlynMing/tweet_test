@@ -53,6 +53,7 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("since_id", 1);
+		//params.put("include_entities", true);
 		params.put("tweet_mode", "extended");
 		client.get(apiUrl, params, handler);
 	}
@@ -64,6 +65,7 @@ public class TwitterClient extends OAuthBaseClient {
 
 		RequestParams params = new RequestParams();
 		params.put("id", id);
+		params.put("include_entities", true);
 		params.put("tweet_mode", "extended");
 		client.get(apiUrl, params, handler);
 	}
@@ -75,6 +77,7 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("max_id", maxId + 1);
+		params.put("include_entities", true);
 		params.put("tweet_mode", "extended");
 		client.get(apiUrl, params, handler);
 	}

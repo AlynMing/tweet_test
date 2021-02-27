@@ -32,12 +32,16 @@ public class Tweet {
     @ColumnInfo
     public long tweetUserId;
 
+    //@Embedded
+    @ColumnInfo
+    public List<String> images;
+
+    @ColumnInfo
+    public List<String> videoUrl;
+
     @ColumnInfo
     @PrimaryKey(autoGenerate = true)
     public long id;
-
-    @ColumnInfo
-    public String videoUrl;
 
     @Embedded
     public User user;
@@ -46,19 +50,39 @@ public class Tweet {
 
     public static Tweet fromJson(JSONObject jsonObject, int requestType) throws JSONException {
         Tweet tweet = new Tweet();
+        tweet.images = new ArrayList<>();
+        tweet.videoUrl = new ArrayList<>();
         tweet.body = jsonObject.getString("full_text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.tweetUserId = tweet.user.userId;
         tweet.id = jsonObject.getLong("id");
-        Log.i("DATA", jsonObject.toString());
-        if(jsonObject.has("video_info")) {
-            tweet.videoUrl = jsonObject
-                    .getJSONObject("video_info")
-                    .getJSONArray("variants")
-                    .getJSONObject(0)
-                    .getString("url");
+        if(jsonObject.getJSONObject("entities").has("media"))
+        {
+            JSONArray media = jsonObject.getJSONObject("entities").getJSONArray("media");
+            Log.i("MEDIA", media.toString());
+            for(int i = 0; i < media.length(); i++)
+            {
+                tweet.images.add(media.getJSONObject(i).getString("media_url"));
+            }
         }
+        if(jsonObject.has("extended_entities"))
+        {
+
+            JSONArray media = jsonObject.getJSONObject("extended_entities").getJSONArray("media");
+            Log.i("VIDEO", media.getJSONObject(0).getString("type"));
+            for(int i = 0; i < media.length(); i++)
+            {
+                JSONObject o = media.getJSONObject(i);
+                if(o.getString("type").equals("video"))
+                {
+                    tweet.videoUrl.add(o.getJSONObject("video_info").getJSONArray("variants").getJSONObject(0).getString("url"));
+                    Log.i("VIDEO", tweet.videoUrl.get(tweet.videoUrl.size() - 1));
+                }
+            }
+        }
+        Log.i("DATA", jsonObject.toString());
+
         return  tweet;
     }
 
