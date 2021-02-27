@@ -64,6 +64,6 @@ dependencies {
     // Room for simple persistence with an ORM
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-
+    implementation 'com.google.android.material:material:1.0.0-rc01'
 
 }
