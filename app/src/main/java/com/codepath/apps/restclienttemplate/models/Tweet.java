@@ -23,7 +23,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Parcel
-@Entity//(foreignKeys = @ForeignKey(entity = User.class, parentColumns = "userId", childColumns = "userId"))
+@Entity(foreignKeys = @ForeignKey(entity = User.class, parentColumns = "userId", childColumns = "tweetUserId"))
 public class Tweet {
     @ColumnInfo
     public String body;
@@ -46,6 +46,12 @@ public class Tweet {
     @Embedded
     public User user;
 
+    @ColumnInfo
+    public boolean favourited;
+
+    @ColumnInfo
+    public boolean retweeted;
+
     public Tweet(){}
 
     public static Tweet fromJson(JSONObject jsonObject, int requestType) throws JSONException {
@@ -57,6 +63,8 @@ public class Tweet {
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.tweetUserId = tweet.user.userId;
         tweet.id = jsonObject.getLong("id");
+        tweet.favourited = jsonObject.getBoolean("favorited");
+        tweet.retweeted = jsonObject.getBoolean("retweeted");
         if(jsonObject.getJSONObject("entities").has("media"))
         {
             JSONArray media = jsonObject.getJSONObject("entities").getJSONArray("media");

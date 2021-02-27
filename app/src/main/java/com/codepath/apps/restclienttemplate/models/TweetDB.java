@@ -4,7 +4,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {User.class, Tweet.class}, version = 7)
+@Database(entities = {User.class, Tweet.class}, version = 10)
 @TypeConverters({Converters.class})
 public abstract class TweetDB extends RoomDatabase {
     public abstract TweetDao tweetDao();

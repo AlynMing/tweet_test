@@ -2,10 +2,13 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,6 +112,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
         TextView tvScreenName;
         TextView tvName;
         TextView tvDate;
+        ImageView ivRetweet;
+        ImageView ivLIke;
+        ImageView ivReply;
 
         RelativeLayout container;
 
@@ -120,6 +126,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
             tvName = itemView.findViewById(R.id.tvName);
             tvDate = itemView.findViewById(R.id.tvDate);
             container = itemView.findViewById(R.id.rvTweet);
+            ivRetweet = itemView.findViewById(R.id.retweet);
+            ivLIke = itemView.findViewById(R.id.like);
+            ivReply = itemView.findViewById(R.id.comment);
         }
 
 
@@ -128,6 +137,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
             tvScreenName.setText(context.getString(R.string.screen_name, tweet.user.name));
             tvName.setText(tweet.user.name);
             tvDate.setText(tweet.getTimestamp());
+            ivReply.setImageResource(R.drawable.vector_compose_dm_fab);
+            if(tweet.retweeted)
+                ivRetweet.setImageResource(R.drawable.ic_vector_retweet);
+            else
+                ivRetweet.setImageResource(R.drawable.ic_vector_retweet_stroke);
+            if(tweet.favourited)
+                ivLIke.setImageResource(R.drawable.ic_vector_heart);
+            else
+                ivLIke.setImageResource(R.drawable.ic_vector_heart_stroke);
 
 
             Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
@@ -142,9 +160,16 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
         }
     }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
+    }
     @Override
     public int getItemViewType(int position) {
-        if(tweets.get(position).videoUrl.size() > 0)
+        Log.i("FIND", String.valueOf(tweets.get(position).videoUrl.size()));
+        Log.i("FIND", String.valueOf(tweets.get(position).videoUrl.get(0)));
+
+        if(tweets.get(position).videoUrl.size() > 0 && isNetworkConnected())
             return  1;
         else
             return 0;
@@ -157,6 +182,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
         TextView tvName;
         TextView tvDate;
         VideoView player;
+
 
         RelativeLayout container;
 

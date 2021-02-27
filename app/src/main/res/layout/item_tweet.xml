@@ -51,6 +51,31 @@
         android:textSize="12sp"
         tools:text="-37s" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="50dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/retweet"
+        android:layout_below="@+id/tvBody"
+        android:layout_toEndOf="@+id/comment"
+        android:layout_marginStart="25dp"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/like"
+        android:layout_below="@+id/tvBody"
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@+id/retweet"/>
+
 
 
 </RelativeLayout>

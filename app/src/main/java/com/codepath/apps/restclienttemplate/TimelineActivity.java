@@ -39,6 +39,8 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+         Log.i("NAME", getApplicationContext().getPackageName());
+
         client = TwitterApp.getRestClient(this);
 
         swipeContainer = findViewById(R.id.swipeContainer);
@@ -116,6 +118,7 @@ public class TimelineActivity extends AppCompatActivity {
                                 List<Tweet> items = Tweet.fromJsonArray(jsonArray);
                                 for(Tweet item : items)
                                 {
+                                    LoginActivity.tweetDao.insertUser(item.user);
                                     LoginActivity.tweetDao.insertTweet(item);
                                     Log.i("insert", "insert");
 
@@ -133,19 +136,30 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.clear();
-                        tweets.addAll(LoginActivity.tweetDao.getTweets());
-                        adapter.notifyDataSetChanged();
-                        //swipeContainer.setRefreshing(false);
-                    }
-                });
+                new LongOperation().execute();
+
 
                         //adapter.addAll(t);
                 Log.i(TAG, "failure" + response, throwable);
             }
         });
+    }
+
+    private class LongOperation extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            adapter.clear();
+            List<Tweet> t = LoginActivity.tweetDao.getTweets();
+            tweets.addAll(t);
+            Log.i("ASYNC", String.valueOf(t.size()));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i("ASYNC", "NOTIFIED");
+            adapter.notifyDataSetChanged();
+        }
     }
 }
