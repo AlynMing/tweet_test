@@ -166,8 +166,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
     }
     @Override
     public int getItemViewType(int position) {
-        Log.i("FIND", String.valueOf(tweets.get(position).videoUrl.size()));
-        Log.i("FIND", String.valueOf(tweets.get(position).videoUrl.get(0)));
+        //Log.i("FIND", String.valueOf(tweets.get(position).videoUrl.size()));
+        //Log.i("FIND", String.valueOf(tweets.get(position).videoUrl.get(0)));
 
         if(tweets.get(position).videoUrl.size() > 0 && isNetworkConnected())
             return  1;
