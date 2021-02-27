@@ -85,6 +85,7 @@ public class TimelineActivity extends AppCompatActivity {
                 try {
                     List<Tweet> tweets = Tweet.fromJsonArray(jsonArray);
                     adapter.addAll(tweets);
+                    adapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -138,16 +139,11 @@ public class TimelineActivity extends AppCompatActivity {
                         adapter.clear();
                         tweets.addAll(LoginActivity.tweetDao.getTweets());
                         adapter.notifyDataSetChanged();
+                        //swipeContainer.setRefreshing(false);
                     }
                 });
 
                         //adapter.addAll(t);
-
-
-
-
-
-                swipeContainer.setRefreshing(false);
                 Log.i(TAG, "failure" + response, throwable);
             }
         });
