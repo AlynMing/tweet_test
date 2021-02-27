@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.models;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.TimeFormatter;
 import com.codepath.apps.restclienttemplate.TimelineActivity;
@@ -35,6 +36,9 @@ public class Tweet {
     @PrimaryKey(autoGenerate = true)
     public long id;
 
+    @ColumnInfo
+    public String videoUrl;
+
     @Embedded
     public User user;
 
@@ -42,11 +46,19 @@ public class Tweet {
 
     public static Tweet fromJson(JSONObject jsonObject, int requestType) throws JSONException {
         Tweet tweet = new Tweet();
-        tweet.body = jsonObject.getString("text");
+        tweet.body = jsonObject.getString("full_text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.tweetUserId = tweet.user.userId;
         tweet.id = jsonObject.getLong("id");
+        Log.i("DATA", jsonObject.toString());
+        if(jsonObject.has("video_info")) {
+            tweet.videoUrl = jsonObject
+                    .getJSONObject("video_info")
+                    .getJSONArray("variants")
+                    .getJSONObject(0)
+                    .getString("url");
+        }
         return  tweet;
     }
 

@@ -47,6 +47,7 @@ public class DetailedTweet extends AppCompatActivity {
         tvName.setText(tweet.user.name);
         tvScreenName.setText(tweet.user.screenName);
         tvDate.setText(tweet.getFullTime());
+        tvBody.setText(tweet.body);
 
         client = TwitterApp.getRestClient(this);
         client.getTweet(new JsonHttpResponseHandler() {

@@ -80,7 +80,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public void clear()
     {
         tweets.clear();
-        notifyDataSetChanged();
     }
 
     public void addAll(List<Tweet> tweetList)

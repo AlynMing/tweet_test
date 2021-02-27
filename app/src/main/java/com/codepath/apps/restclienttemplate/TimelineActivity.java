@@ -80,7 +80,7 @@ public class TimelineActivity extends AppCompatActivity {
         client.getNextPageOfTweets(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "onSuccess more");
+                Log.i(TAG, "onSuccess more" + tweets.get(tweets.size() - 1).id);
                 JSONArray jsonArray = json.jsonArray;
                 try {
                     List<Tweet> tweets = Tweet.fromJsonArray(jsonArray);
@@ -106,6 +106,7 @@ public class TimelineActivity extends AppCompatActivity {
                 JSONArray jsonArray = json.jsonArray;
                 try {
                     adapter.clear();
+                    adapter.notifyDataSetChanged();
                     adapter.addAll(Tweet.fromJsonArray(jsonArray));
                     swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
@@ -120,6 +121,7 @@ public class TimelineActivity extends AppCompatActivity {
                     public void run() {
                         List<Tweet> t = LoginActivity.tweetDao.getTweets();
                         adapter.clear();
+                        adapter.notifyDataSetChanged();
                         adapter.addAll(t);
                         swipeContainer.setRefreshing(false);
                         Log.i("sqlite_info", t1.get(0).toString());

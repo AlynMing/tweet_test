@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "577edc7b45fbd3afbbb066275f5473c8",
+    "identityHash": "049ddecf505855b559afee53019c803b",
     "entities": [
       {
         "tableName": "User",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "Tweet",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`body` TEXT, `createdAt` TEXT, `tweetUserId` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `screenName` TEXT, `profileImageUrl` TEXT, `userId` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`body` TEXT, `createdAt` TEXT, `tweetUserId` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `videoUrl` TEXT, `name` TEXT, `screenName` TEXT, `profileImageUrl` TEXT, `userId` INTEGER)",
         "fields": [
           {
             "fieldPath": "body",
@@ -69,6 +69,12 @@
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "videoUrl",
+            "columnName": "videoUrl",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "user.name",
@@ -108,7 +114,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '577edc7b45fbd3afbbb066275f5473c8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '049ddecf505855b559afee53019c803b')"
     ]
   }
 }
