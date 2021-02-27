@@ -60,6 +60,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.10.5'
+    compile 'com.github.danylovolokh:video-player-manager:0.2.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
     implementation 'org.parceler:parceler-api:1.1.12'

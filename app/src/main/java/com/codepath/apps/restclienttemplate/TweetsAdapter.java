@@ -26,7 +26,7 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
+public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder>{
     private void fixTextView(TextView tv) {
         SpannableString current = (SpannableString) tv.getText();
         URLSpan[] spans =
@@ -65,13 +65,21 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_tweet, parent, false);
-        return new ViewHolder(view);
+    public bindHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == 0) {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_tweet, parent, false);
+            return new ViewHolder(view);
+        }
+        else
+        {
+            View view = LayoutInflater.from(context).inflate(R.layout.video_tweet, parent, false);
+            return  new VideoHolder(view);
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull bindHolder holder, int position) {
         Tweet tweet = tweets.get(position);
         holder.bind(tweet); 
     }
@@ -92,15 +100,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         //notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+
+    public class ViewHolder extends bindHolder {
 
         ImageView ivProfileImage;
         LinkifyTextView tvBody;
         TextView tvScreenName;
         TextView tvName;
         TextView tvDate;
-        SimpleExoPlayer absPlayerInternal;
-        PlayerView pvMain;
 
         RelativeLayout container;
 
@@ -121,6 +129,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvName.setText(tweet.user.name);
             tvDate.setText(tweet.getTimestamp());
 
+
             Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,4 +141,66 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             });
         }
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(tweets.get(position).videoUrl.size() > 0)
+            return  1;
+        else
+            return 0;
+    }
+
+    public class VideoHolder extends bindHolder {
+        ImageView ivProfileImage;
+        LinkifyTextView tvBody;
+        TextView tvScreenName;
+        TextView tvName;
+        TextView tvDate;
+        VideoView player;
+
+        RelativeLayout container;
+
+        public VideoHolder(@NonNull View itemView) {
+            super(itemView);
+            ivProfileImage = itemView.findViewById(R.id.ivProfile);
+            tvBody = itemView.findViewById(R.id.tvBody);
+            tvScreenName = itemView.findViewById(R.id.tvScreenName);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            container = itemView.findViewById(R.id.rvVideo);
+            player = itemView.findViewById(R.id.player);
+        }
+
+
+        public void bind(final Tweet tweet) {
+            tvBody.setText(tweet.body);
+            tvScreenName.setText(context.getString(R.string.screen_name, tweet.user.name));
+            tvName.setText(tweet.user.name);
+            tvDate.setText(tweet.getTimestamp());
+            player.setVideoURI(Uri.parse(tweet.videoUrl.get(0)));
+            player.start();
+
+
+            Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, DetailedTweet.class);
+                    i.putExtra("tweet", Parcels.wrap(tweet));
+                    context.startActivity(i);
+                }
+            });
+        }
+    }
+
+    public abstract class bindHolder extends RecyclerView.ViewHolder
+    {
+
+        public bindHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+
+        public  abstract void bind(Tweet tweet);
+    }
+
 }
