@@ -46,7 +46,7 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
-                android.R.color.holo_red_light );
+                android.R.color.holo_red_light);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -85,13 +85,6 @@ public class TimelineActivity extends AppCompatActivity {
                 try {
                     List<Tweet> tweets = Tweet.fromJsonArray(jsonArray);
                     adapter.addAll(tweets);
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                             t1 = LoginActivity.tweetDao.getTweets();
-                             Log.i("sqlite_info", t1.get(0).toString());
-                        };
-                    });
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -122,6 +115,18 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<Tweet> t = LoginActivity.tweetDao.getTweets();
+                        adapter.clear();
+                        adapter.addAll(t);
+                        swipeContainer.setRefreshing(false);
+                        Log.i("sqlite_info", t1.get(0).toString());
+                    }
+
+                    ;
+                });
                 Log.i(TAG, "failure" + response, throwable);
             }
         });

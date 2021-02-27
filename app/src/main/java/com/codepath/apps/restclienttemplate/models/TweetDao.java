@@ -19,7 +19,7 @@ public interface TweetDao {
     //@Query("SELECT * FROM Tweet ORDER BY ID DESC LIMIT 50")
     //List<SampleModel> recentTweets();
 
-    @Query("SELECT * FROM User INNER JOIN Tweet ON User.userId == Tweet.userId")
+    @Query("SELECT DISTINCT * FROM User INNER JOIN Tweet ON User.userId == Tweet.userId ORDER BY Tweet.id DESC LIMIT 25")
     public List<Tweet> getTweets();
 
     @Delete
