@@ -28,6 +28,7 @@ public class DetailedTweet extends AppCompatActivity {
     TwitterClient client;
     TextView tvDate;
     String fullText;
+    ImageView ivImg;
 
 
     @Override
@@ -42,37 +43,17 @@ public class DetailedTweet extends AppCompatActivity {
         tvScreenName = findViewById(R.id.tvScreenName);
         tvDate = findViewById(R.id.tvDate);
         tvBody = findViewById(R.id.tvBody);
+        ivImg = findViewById(R.id.ivImg);
 
+        if(tweet.images.size() > 0)
+            Glide.with(this).load(tweet.images.get(0)).into(ivImg);
         Glide.with(this).load(tweet.user.profileImageUrl).into(ivProfileImage);
         tvName.setText(tweet.user.name);
         tvScreenName.setText(tweet.user.screenName);
         tvDate.setText(tweet.getFullTime());
         tvBody.setText(tweet.body);
 
-        client = TwitterApp.getRestClient(this);
-        client.getTweet(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                try {
-                    tvBody.setText(json.jsonObject.getString("full_text"));
-                    ;
-                    String url =json
-                            .jsonObject
-                            .getJSONObject("video_info")
-                            .getJSONArray("variants")
-                            .getJSONObject(0)
-                            .getString("url");
-                    Log.i("123","123");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.i("Detailed", "Fail");
-            }
-        }, tweet.id);
 
     }
 }

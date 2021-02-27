@@ -51,8 +51,5 @@
         android:textSize="12sp"
         tools:text="-37s" />
 
-    <VideoView
-        android:id="@+id/vvTweetvideo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

@@ -108,6 +108,22 @@ public class TimelineActivity extends AppCompatActivity {
                     adapter.clear();
                     adapter.notifyDataSetChanged();
                     adapter.addAll(Tweet.fromJsonArray(jsonArray));
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                List<Tweet> items = Tweet.fromJsonArray(jsonArray);
+                                for(Tweet item : items)
+                                {
+                                    LoginActivity.tweetDao.insertTweet(item);
+                                    Log.i("insert", "insert");
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        };
+                    });
                     swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
                     Log.e(TAG, "error parsing json", e);
@@ -119,16 +135,19 @@ public class TimelineActivity extends AppCompatActivity {
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        List<Tweet> t = LoginActivity.tweetDao.getTweets();
                         adapter.clear();
+                        tweets.addAll(LoginActivity.tweetDao.getTweets());
                         adapter.notifyDataSetChanged();
-                        adapter.addAll(t);
-                        swipeContainer.setRefreshing(false);
-                        Log.i("sqlite_info", t1.get(0).toString());
                     }
-
-                    ;
                 });
+
+                        //adapter.addAll(t);
+
+
+
+
+
+                swipeContainer.setRefreshing(false);
                 Log.i(TAG, "failure" + response, throwable);
             }
         });

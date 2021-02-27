@@ -60,28 +60,41 @@ public class Tweet {
         if(jsonObject.getJSONObject("entities").has("media"))
         {
             JSONArray media = jsonObject.getJSONObject("entities").getJSONArray("media");
-            Log.i("MEDIA", media.toString());
+            //Log.i("MEDIA", media.toString());
             for(int i = 0; i < media.length(); i++)
             {
                 tweet.images.add(media.getJSONObject(i).getString("media_url"));
+            }
+        }
+        if(jsonObject.has("retweeted_status") && jsonObject.getJSONObject("retweeted_status").getJSONObject("entities").has("media"))
+        {
+            JSONArray media = jsonObject.getJSONObject("retweeted_status").getJSONObject("entities").getJSONArray("media");
+            for(int i = 0; i < media.length(); i++)
+            {
+                //Log.i("RTMEDIA", media.toString());
+                tweet.images.add(media.getJSONObject(i).getString("media_url_https"));
             }
         }
         if(jsonObject.has("extended_entities"))
         {
 
             JSONArray media = jsonObject.getJSONObject("extended_entities").getJSONArray("media");
-            Log.i("VIDEO", media.getJSONObject(0).getString("type"));
+            //Log.i("VIDEO", media.getJSONObject(0).getString("type"));
             for(int i = 0; i < media.length(); i++)
             {
                 JSONObject o = media.getJSONObject(i);
                 if(o.getString("type").equals("video"))
                 {
                     tweet.videoUrl.add(o.getJSONObject("video_info").getJSONArray("variants").getJSONObject(0).getString("url"));
-                    Log.i("VIDEO", tweet.videoUrl.get(tweet.videoUrl.size() - 1));
+                    //Log.i("VIDEO", tweet.videoUrl.get(tweet.videoUrl.size() - 1));
+                }
+                else if(o.getString("type").equals("photo"))
+                {
+                    tweet.images.add(o.getString("media_url_https"));
                 }
             }
         }
-        Log.i("DATA", jsonObject.toString());
+        //Log.i("DATA", jsonObject.toString());
 
         return  tweet;
     }

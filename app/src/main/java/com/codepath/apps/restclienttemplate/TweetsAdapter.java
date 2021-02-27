@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.PlayerView;
 
 import org.parceler.Parcels;
 
@@ -86,28 +88,20 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     public void addAll(List<Tweet> tweetList)
     {
-        for(final Tweet item : tweetList)
-        {
-            tweets.add(item);
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    LoginActivity.tweetDao.insertTweet(item);
-                    LoginActivity.tweetDao.insertUser(item.user);
-                }
-            });
-        }
-        notifyDataSetChanged();
+        tweets.addAll(tweetList);
+        //notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivProfileImage;
-        VideoView vvTweetvideo;
         LinkifyTextView tvBody;
         TextView tvScreenName;
         TextView tvName;
         TextView tvDate;
+        SimpleExoPlayer absPlayerInternal;
+        PlayerView pvMain;
+
         RelativeLayout container;
 
         public ViewHolder(@NonNull View itemView) {
@@ -117,7 +111,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvName = itemView.findViewById(R.id.tvName);
             tvDate = itemView.findViewById(R.id.tvDate);
-            vvTweetvideo = itemView.findViewById(R.id.vvTweetvideo);
             container = itemView.findViewById(R.id.rvTweet);
         }
 
@@ -127,9 +120,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName.setText(context.getString(R.string.screen_name, tweet.user.name));
             tvName.setText(tweet.user.name);
             tvDate.setText(tweet.getTimestamp());
-            if(tweet.videoUrl.size() != 0) {
-                vvTweetvideo.setVideoURI(Uri.parse(tweet.videoUrl.get(0)));
-            }
+
             Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
