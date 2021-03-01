@@ -13,6 +13,8 @@ import java.util.List;
 public class Converters {
     @TypeConverter
     public static List<String> fromString(String value) {
+        if(value == "")
+            return new ArrayList<>();
         return (List<String>) Arrays.asList(value.split(","));
 
     }

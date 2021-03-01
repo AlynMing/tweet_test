@@ -169,7 +169,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
         //Log.i("FIND", String.format("%b, %s", tweets.get(position).videoUrl.isEmpty(), tweets.get(position).body));
         //Log.i("FIND", String.valueOf(tweets.get(position).videoUrl.get(0)));
 
-        if(tweets.get(position).videoUrl.size() > 0 && !tweets.get(position).videoUrl.get(0).equals("") && isNetworkConnected())
+        if(tweets.get(position).videoUrl.size() > 0 && isNetworkConnected())
         {
             return  1;
         }

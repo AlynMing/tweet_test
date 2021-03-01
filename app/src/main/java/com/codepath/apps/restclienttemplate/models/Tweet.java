@@ -65,6 +65,14 @@ public class Tweet {
         tweet.id = jsonObject.getLong("id");
         tweet.favourited = jsonObject.getBoolean("favorited");
         tweet.retweeted = jsonObject.getBoolean("retweeted");
+        setMediaUrl(jsonObject, tweet);
+        setVideoUrl(jsonObject, tweet);
+        //Log.i("DATA", jsonObject.toString());
+
+        return  tweet;
+    }
+
+    private static void setMediaUrl(JSONObject jsonObject, Tweet tweet) throws JSONException {
         if(jsonObject.getJSONObject("entities").has("media"))
         {
             JSONArray media = jsonObject.getJSONObject("entities").getJSONArray("media");
@@ -83,6 +91,9 @@ public class Tweet {
                 tweet.images.add(media.getJSONObject(i).getString("media_url_https"));
             }
         }
+    }
+
+    private static void setVideoUrl(JSONObject jsonObject, Tweet tweet) throws JSONException {
         if(jsonObject.has("extended_entities"))
         {
 
@@ -102,10 +113,9 @@ public class Tweet {
                 }
             }
         }
-        //Log.i("DATA", jsonObject.toString());
-
-        return  tweet;
     }
+
+
 
     public String getTimestamp()
     {
