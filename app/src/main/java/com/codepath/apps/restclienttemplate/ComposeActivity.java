@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -26,6 +29,8 @@ public class ComposeActivity extends AppCompatActivity {
 
     EditText etCompose;
     Button btnTweet;
+    TextView tvCharcount;
+    ComposeActivity context;
 
     TwitterClient client;
 
@@ -37,6 +42,28 @@ public class ComposeActivity extends AppCompatActivity {
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
         client = TwitterApp.getRestClient(this);
+        tvCharcount = findViewById(R.id.tvCharcount);
+        tvCharcount.setText(String.format(this.getString(R.string.char_count), 0));
+        context = this;
+
+        etCompose.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                tvCharcount.setText(String.format(context.getString(R.string.char_count), i));
+                btnTweet.setEnabled(i <= MAX_TWEET_LENGTH);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
