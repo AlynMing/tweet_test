@@ -32,7 +32,7 @@ public class TimelineActivity extends AppCompatActivity {
     public static final String TAG = "TimelineActivity";
     public static final int TRUNCATED = 0;
     public static final int FULL = 1;
-    private static final int REQUEST_CODE = 20;
+    public static final int REQUEST_CODE = 20;
     TwitterClient client;
     RecyclerView rvTweets;
     List<Tweet> tweets;

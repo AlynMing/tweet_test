@@ -31,6 +31,7 @@ public class ComposeActivity extends AppCompatActivity {
     Button btnTweet;
     TextView tvCharcount;
     ComposeActivity context;
+    long replyId;
 
     TwitterClient client;
 
@@ -44,19 +45,19 @@ public class ComposeActivity extends AppCompatActivity {
         client = TwitterApp.getRestClient(this);
         tvCharcount = findViewById(R.id.tvCharcount);
         tvCharcount.setText(String.format(this.getString(R.string.char_count), 0));
+        replyId = getIntent().getLongExtra("reply_id", -1);
         context = this;
 
         etCompose.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                tvCharcount.setText(String.format(context.getString(R.string.char_count), i));
-                btnTweet.setEnabled(i <= MAX_TWEET_LENGTH);
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+                tvCharcount.setText(String.format(context.getString(R.string.char_count), etCompose.length()));
+                btnTweet.setEnabled(i <= MAX_TWEET_LENGTH);
             }
 
             @Override
@@ -79,7 +80,7 @@ public class ComposeActivity extends AppCompatActivity {
                     return;
                 }
                 //Toast.makeText(ComposeActivity.this, tweetContent, Toast.LENGTH_SHORT).show();
-                client.publishTweet(tweetContent, -1, new JsonHttpResponseHandler() {
+                client.publishTweet(tweetContent, replyId, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
                         Log.i(TAG, "onSuccessPublish");

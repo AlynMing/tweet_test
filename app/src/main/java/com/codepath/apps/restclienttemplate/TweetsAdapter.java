@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.models.DefensiveURLSpan;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -44,20 +47,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
                     0);
         }
     }
-    public static class DefensiveURLSpan extends URLSpan {
-        private String mUrl;
 
-        public DefensiveURLSpan(String url) {
-            super(url);
-            mUrl = url;
-        }
-
-        @Override
-        public void onClick(View widget) {
-            // openInWebView(widget.getContext(), mUrl); // intercept click event and do something.
-            // super.onClick(widget); // or it will do as it is.
-        }
-    }
     Context context;
     List<Tweet> tweets;
 
@@ -115,6 +105,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
         ImageView ivRetweet;
         ImageView ivLIke;
         ImageView ivReply;
+        ImageButton btnReply;
 
         RelativeLayout container;
 
@@ -129,6 +120,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
             ivRetweet = itemView.findViewById(R.id.retweet);
             ivLIke = itemView.findViewById(R.id.like);
             ivReply = itemView.findViewById(R.id.comment);
+            btnReply = itemView.findViewById(R.id.btnReply);
         }
 
 
@@ -138,6 +130,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
             tvName.setText(tweet.user.name);
             tvDate.setText(tweet.getTimestamp());
             ivReply.setImageResource(R.drawable.vector_compose_dm_fab);
+            btnReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, ComposeActivity.class);
+                    i.putExtra("reply_id", tweet.id);
+                    ((Activity)context).startActivityForResult(i, TimelineActivity.REQUEST_CODE);
+                }
+            });
             if(tweet.retweeted)
                 ivRetweet.setImageResource(R.drawable.ic_vector_retweet);
             else
@@ -230,5 +230,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
 
         public  abstract void bind(Tweet tweet);
     }
+
 
 }
