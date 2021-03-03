@@ -6,5 +6,7 @@
     <string name="intent_scheme">oauth</string>
     <string name="intent_host">codepathtweets</string>
     <string name="screen_name">\@%s</string>
+    <string name="tweet">Tweet</string>
+    <string name="what_s_happening">What\'s happening?</string>
 
 </resources>

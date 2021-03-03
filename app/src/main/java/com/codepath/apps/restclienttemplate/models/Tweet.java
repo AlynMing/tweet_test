@@ -54,7 +54,7 @@ public class Tweet {
 
     public Tweet(){}
 
-    public static Tweet fromJson(JSONObject jsonObject, int requestType) throws JSONException {
+    public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
         tweet.images = new ArrayList<>();
         tweet.videoUrl = new ArrayList<>();
@@ -140,7 +140,7 @@ public class Tweet {
         List<Tweet> tweets = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++)
         {
-            tweets.add(fromJson(jsonArray.getJSONObject(i), TimelineActivity.TRUNCATED));
+            tweets.add(fromJson(jsonArray.getJSONObject(i)));
         }
         return  tweets;
     }
