@@ -79,7 +79,7 @@ public class ComposeActivity extends AppCompatActivity {
                     return;
                 }
                 //Toast.makeText(ComposeActivity.this, tweetContent, Toast.LENGTH_SHORT).show();
-                client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
+                client.publishTweet(tweetContent, -1, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
                         Log.i(TAG, "onSuccessPublish");
