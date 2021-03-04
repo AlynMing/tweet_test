@@ -13,10 +13,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,12 +36,14 @@ public class TimelineActivity extends AppCompatActivity {
     public static final int FULL = 1;
     public static final int REQUEST_CODE = 20;
     TwitterClient client;
+    FloatingActionButton fbCompose;
     RecyclerView rvTweets;
     List<Tweet> tweets;
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener scrollListener;
     List<Tweet> t1;
+    TimelineActivity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +70,13 @@ public class TimelineActivity extends AppCompatActivity {
 
 
         rvTweets = findViewById(R.id.rvTweets);
+        fbCompose = findViewById(R.id.fbCompose);
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(layoutManager);
         rvTweets.setAdapter(adapter);
+        context = this;
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -82,8 +88,18 @@ public class TimelineActivity extends AppCompatActivity {
 
         rvTweets.addOnScrollListener(scrollListener);
 
+        fbCompose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, ComposeActivity.class);
+                startActivityForResult(i, REQUEST_CODE);
+            }
+        });
+
         populateHomeTimeline();
     }
+
+
 
     private void loadMoredata() {
         client.getNextPageOfTweets(new JsonHttpResponseHandler() {

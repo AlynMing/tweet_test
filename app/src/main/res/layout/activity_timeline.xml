@@ -30,4 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:src="@drawable/ic_vector_compose"
+        android:id="@+id/fbCompose"
+        app:fabSize="normal"
+        android:backgroundTint="@color/twitter_blue"
+        android:layout_gravity="right|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
