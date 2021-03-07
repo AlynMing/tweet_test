@@ -117,7 +117,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
     @Override
     public void onFinishTweetDialog(int resultCode, Tweet data, String text)
     {
-        if(resultCode == -1)
+        if(resultCode == TweetDialog.OK)
         {
             tweets.add(0, data);
             AsyncTask.execute(new Runnable() {
@@ -130,7 +130,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
             adapter.notifyItemInserted(0);
             rvTweets.smoothScrollToPosition(0);
         }
-        if(resultCode == 1)
+        if(resultCode == TweetDialog.NO_INTERNET)
         {
             runOnUiThread(new Runnable() {
                 @Override
@@ -141,7 +141,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
 
         }
 
-        if(resultCode == 2)
+        if(resultCode == TweetDialog.CANCELLED)
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Save or dismiss draft?");

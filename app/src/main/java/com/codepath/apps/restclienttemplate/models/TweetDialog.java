@@ -39,6 +39,9 @@ public class TweetDialog extends DialogFragment {
     EditText etCompose;
     Button btnTweet;
     TextView tvCharcount;
+    public static final int OK = -1;
+    public static final int NO_INTERNET = 1;
+    public static final int CANCELLED = 2;
     FragmentActivity context;
     long replyId;
     String textInit;
@@ -75,7 +78,7 @@ public class TweetDialog extends DialogFragment {
         if(etCompose.getText().length() > 0 && !etCompose.getText().toString().equals(textInit))
         {
             TweetDialogListener listener = (TweetDialogListener)getActivity();
-            listener.onFinishTweetDialog(2, null, etCompose.getText().toString());
+            listener.onFinishTweetDialog(CANCELLED, null, etCompose.getText().toString());
         }
 
         dismiss();
@@ -141,7 +144,7 @@ public class TweetDialog extends DialogFragment {
                             Intent intent = new Intent();
                             intent.putExtra("tweet", Parcels.wrap(tweet));
                             TweetDialogListener listener = (TweetDialogListener)getActivity();
-                            listener.onFinishTweetDialog(-1, tweet, null);
+                            listener.onFinishTweetDialog(OK, tweet, null);
                             dismiss();
                             //setResult(RESULT_OK, intent);
                             //finish();
@@ -153,7 +156,7 @@ public class TweetDialog extends DialogFragment {
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                         TweetDialogListener listener = (TweetDialogListener)getActivity();
-                        listener.onFinishTweetDialog(1, null, null);
+                        listener.onFinishTweetDialog(NO_INTERNET, null, null);
                         dismiss();
                         Log.e(TAG, "onFailurePublish", throwable);
                     }
