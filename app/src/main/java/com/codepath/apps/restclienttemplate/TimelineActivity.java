@@ -1,13 +1,17 @@
 package com.codepath.apps.restclienttemplate;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,12 +50,15 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
     EndlessRecyclerViewScrollListener scrollListener;
     List<Tweet> t1;
     TimelineActivity context;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+
+        prefs = this.getSharedPreferences("com.codepath.apps.restclienttemplate", Context.MODE_PRIVATE);
          Log.i("NAME", getApplicationContext().getPackageName());
 
         client = TwitterApp.getRestClient(this);
@@ -103,12 +110,12 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
     public void ShowDialog()
     {
         FragmentManager fm = getSupportFragmentManager();
-        TweetDialog td = TweetDialog.newInstance("Compose");
+        TweetDialog td = TweetDialog.newInstance("Compose", prefs.getString("tweetText", ""));
         td.show(fm, "fragment_edit_name");
     }
 
     @Override
-    public void onFinishTweetDialog(int resultCode, Tweet data)
+    public void onFinishTweetDialog(int resultCode, Tweet data, String text)
     {
         if(resultCode == -1)
         {
@@ -133,6 +140,41 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
             });
 
         }
+
+        if(resultCode == 2)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Save or dismiss draft?");
+            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            prefs.edit().putString("tweetText", text).apply();
+                            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                    dialogInterface.cancel();
+                }
+            });
+            builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "Dismissed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    dialogInterface.cancel();
+                }
+            });
+            builder.show();
+        }
+
+        Log.i("CODE", String.valueOf(resultCode));
     }
 
 

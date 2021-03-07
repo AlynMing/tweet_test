@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -48,14 +49,15 @@ public class TweetDialog extends DialogFragment {
     }
 
     public interface TweetDialogListener {
-        void onFinishTweetDialog(int resultData, Tweet data);
+        void onFinishTweetDialog(int resultData, Tweet data, String text);
     }
 
-    public static  TweetDialog newInstance(String title)
+    public static  TweetDialog newInstance(String title, String savedText)
     {
         TweetDialog td = new TweetDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
+        args.putString("savedText", savedText);
         td.setArguments(args);
         return  td;
     }
@@ -64,6 +66,18 @@ public class TweetDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup containter, Bundle saved)
     {
         return  inflater.inflate(R.layout.activity_compose, containter);
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog)
+    {
+        if(etCompose.getText().length() > 0)
+        {
+            TweetDialogListener listener = (TweetDialogListener)getActivity();
+            listener.onFinishTweetDialog(2, null, etCompose.getText().toString());
+        }
+
+        dismiss();
     }
 
     @Override
@@ -79,6 +93,9 @@ public class TweetDialog extends DialogFragment {
         tvCharcount.setText(String.format(this.getString(R.string.char_count), 0));
         context = getActivity();
         replyId = context.getIntent().getLongExtra("reply_id", -1);
+
+        etCompose.setText(getArguments().getString("savedText", ""));
+
         etCompose.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -96,6 +113,8 @@ public class TweetDialog extends DialogFragment {
 
             }
         });
+
+
 
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +140,7 @@ public class TweetDialog extends DialogFragment {
                             Intent intent = new Intent();
                             intent.putExtra("tweet", Parcels.wrap(tweet));
                             TweetDialogListener listener = (TweetDialogListener)getActivity();
-                            listener.onFinishTweetDialog(-1, tweet);
+                            listener.onFinishTweetDialog(-1, tweet, null);
                             dismiss();
                             //setResult(RESULT_OK, intent);
                             //finish();
@@ -133,12 +152,13 @@ public class TweetDialog extends DialogFragment {
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                         TweetDialogListener listener = (TweetDialogListener)getActivity();
-                        listener.onFinishTweetDialog(1, null);
+                        listener.onFinishTweetDialog(1, null, null);
                         dismiss();
                         Log.e(TAG, "onFailurePublish", throwable);
                     }
                 });
             }
         });
+
     }
 }
