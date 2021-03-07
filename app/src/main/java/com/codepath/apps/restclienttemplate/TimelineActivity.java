@@ -136,6 +136,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
         if(resultCode == TweetDialog.OK)
         {
             tweets.add(0, data);
+            prefs.edit().putString("tweetText", "").apply();
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -268,7 +269,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
                         public void run() {
                             try {
                                 List<Tweet> items = Tweet.fromJsonArray(jsonArray);
-                                LoginActivity.tweetDao.delete();
+                                //LoginActivity.tweetDao.delete();
                                 for(Tweet item : items)
                                 {
                                     LoginActivity.tweetDao.insertUser(item.user);
