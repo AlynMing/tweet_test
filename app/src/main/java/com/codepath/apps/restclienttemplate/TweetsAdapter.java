@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.text.SpannableString;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,10 +130,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
             btnReply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(context, ComposeActivity.class);
-                    i.putExtra("reply_id", tweet.id);
-                    ((TimelineActivity)context).ShowDialog();
-                    ((Activity)context).startActivityForResult(i, TimelineActivity.REQUEST_CODE);
+                    ///Intent i = new Intent(context, ComposeActivity.class);
+                    ///i.putExtra("reply_id", tweet.id);
+                    Log.i("234", String.valueOf(tweet.id));
+                    ((TimelineActivity)context).ShowDialog(tweet.id);
+                    //((Activity)context).startActivityForResult(i, TimelineActivity.REQUEST_CODE);
                 }
             });
             if(tweet.retweeted)

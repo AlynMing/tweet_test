@@ -86,6 +86,7 @@ public class TwitterClient extends OAuthBaseClient {
 	public void publishTweet(String tweetContent, long replyId, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		// Can specify query string params directly or through RequestParams.
+		Log.i("123", String.valueOf(replyId));
 		RequestParams params = new RequestParams();
 		params.put("status", tweetContent);
 		if(replyId != ORIGINAL)

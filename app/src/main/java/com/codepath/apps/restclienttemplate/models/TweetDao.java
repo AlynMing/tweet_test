@@ -25,6 +25,10 @@ public interface TweetDao {
     @Delete
     public void deleteTweet(Tweet tweet);
 
+    @Query("DELETE FROM Tweet")
+    public void delete();
+
+
     @Query("SELECT * FROM User where userId == :id")
     public  User getByUserId(long id);
 

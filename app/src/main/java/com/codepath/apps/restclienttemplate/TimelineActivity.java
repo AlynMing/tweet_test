@@ -61,7 +61,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
          Log.i("NAME", getApplicationContext().getPackageName());
 
         client = TwitterApp.getRestClient(this);
-
         swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
@@ -98,7 +97,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
         fbCompose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowDialog();
+                ShowDialog(-1);
             }
         });
 
@@ -118,15 +117,16 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
                 String titleOfPage = intent.getStringExtra(Intent.EXTRA_SUBJECT);
                 String urlOfPage = intent.getStringExtra(Intent.EXTRA_TEXT);
                 prefs.edit().putString("tweetText", titleOfPage + "\n" + urlOfPage).apply();
-                ShowDialog();
+                ShowDialog(-1);
             }
         }
     }
 
-    public void ShowDialog()
+    public void ShowDialog(long reply)
     {
         FragmentManager fm = getSupportFragmentManager();
-        TweetDialog td = TweetDialog.newInstance("Compose", prefs.getString("tweetText", ""));
+        Log.i("234", String.valueOf(reply));
+        TweetDialog td = TweetDialog.newInstance("Compose", prefs.getString("tweetText", ""), reply);
         td.show(fm, "fragment_edit_name");
     }
 
@@ -268,6 +268,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
                         public void run() {
                             try {
                                 List<Tweet> items = Tweet.fromJsonArray(jsonArray);
+                                LoginActivity.tweetDao.delete();
                                 for(Tweet item : items)
                                 {
                                     LoginActivity.tweetDao.insertUser(item.user);

@@ -61,7 +61,7 @@ public class TweetDialog extends DialogFragment {
         TweetDialog td = new TweetDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
-        //args.putLong("reply_id", replyId);
+        args.putLong("reply_id", replyId);
         args.putString("savedText", savedText);
         td.setArguments(args);
         return  td;
@@ -96,7 +96,7 @@ public class TweetDialog extends DialogFragment {
         client = TwitterApp.getRestClient(getContext());
         tvCharcount = view.findViewById(R.id.tvCharcount);
         context = getActivity();
-        //replyId = saved.getLong("reply_id", -1);
+        replyId = getArguments().getLong("reply_id", -1);
         textInit = getArguments().getString("savedText", "");
         etCompose.setText(textInit);
         tvCharcount.setText(String.format(this.getString(R.string.char_count), etCompose.length()));
