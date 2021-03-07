@@ -22,7 +22,7 @@ import com.codepath.oauth.OAuthLoginActionBarActivity;
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 	//SampleModelDao sampleModelDao;
-	public static TweetDao tweetDao;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		sampleModel.setName("CodePath");
 
 		//sampleModelDao = ((TwitterApp) getApplicationContext()).getMyDatabase().sampleModelDao();
-		tweetDao = ((TwitterApp) getApplicationContext()).getTweetDb().tweetDao();
+
 		Intent intent = getIntent();
 		String action = intent.getAction();
 		String type = intent.getType();

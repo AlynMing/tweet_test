@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetDialog;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,6 +46,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
     List<Tweet> tweets;
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeContainer;
+    public static TweetDao tweetDao;
     EndlessRecyclerViewScrollListener scrollListener;
     List<Tweet> t1;
     TimelineActivity context;
@@ -59,7 +61,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
 
             prefs = this.getSharedPreferences("com.codepath.apps.restclienttemplate", Context.MODE_PRIVATE);
          Log.i("NAME", getApplicationContext().getPackageName());
-
+        tweetDao = ((TwitterApp) getApplicationContext()).getTweetDb().tweetDao();
         client = TwitterApp.getRestClient(this);
         swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(
@@ -140,8 +142,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    LoginActivity.tweetDao.insertUser(data.user);
-                    LoginActivity.tweetDao.insertTweet(data);
+                    tweetDao.insertUser(data.user);
+                    tweetDao.insertTweet(data);
                 }
             });
             adapter.notifyItemInserted(0);
@@ -244,8 +246,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    LoginActivity.tweetDao.insertUser(tweet.user);
-                    LoginActivity.tweetDao.insertTweet(tweet);
+                    tweetDao.insertUser(tweet.user);
+                    tweetDao.insertTweet(tweet);
                 }
             });
             adapter.notifyItemInserted(0);
@@ -269,11 +271,11 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
                         public void run() {
                             try {
                                 List<Tweet> items = Tweet.fromJsonArray(jsonArray);
-                                //LoginActivity.tweetDao.delete();
+                                tweetDao.delete();
                                 for(Tweet item : items)
                                 {
-                                    LoginActivity.tweetDao.insertUser(item.user);
-                                    LoginActivity.tweetDao.insertTweet(item);
+                                    tweetDao.insertUser(item.user);
+                                    tweetDao.insertTweet(item);
                                     Log.i("insert", "insert");
 
                                 }
@@ -304,7 +306,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
         @Override
         protected String doInBackground(String... params) {
             adapter.clear();
-            List<Tweet> t = LoginActivity.tweetDao.getTweets();
+            List<Tweet> t = tweetDao.getTweets();
             tweets.addAll(t);
             Log.i("ASYNC", String.valueOf(t.size()));
             return null;
