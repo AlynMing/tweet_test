@@ -41,6 +41,7 @@ public class TweetDialog extends DialogFragment {
     TextView tvCharcount;
     FragmentActivity context;
     long replyId;
+    String textInit;
 
     TwitterClient client;
 
@@ -71,7 +72,7 @@ public class TweetDialog extends DialogFragment {
     @Override
     public void onCancel(DialogInterface dialog)
     {
-        if(etCompose.getText().length() > 0)
+        if(etCompose.getText().length() > 0 && !etCompose.getText().toString().equals(textInit))
         {
             TweetDialogListener listener = (TweetDialogListener)getActivity();
             listener.onFinishTweetDialog(2, null, etCompose.getText().toString());
@@ -93,8 +94,8 @@ public class TweetDialog extends DialogFragment {
         tvCharcount.setText(String.format(this.getString(R.string.char_count), 0));
         context = getActivity();
         replyId = context.getIntent().getLongExtra("reply_id", -1);
-
-        etCompose.setText(getArguments().getString("savedText", ""));
+        textInit = getArguments().getString("savedText", "");
+        etCompose.setText(textInit);
 
         etCompose.addTextChangedListener(new TextWatcher() {
             @Override
