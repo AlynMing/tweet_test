@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +34,19 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 		//sampleModelDao = ((TwitterApp) getApplicationContext()).getMyDatabase().sampleModelDao();
 		tweetDao = ((TwitterApp) getApplicationContext()).getTweetDb().tweetDao();
+		Intent intent = getIntent();
+		String action = intent.getAction();
+		String type = intent.getType();
 
+		if(Intent.ACTION_SEND.equals(action) )
+		{
+
+
+				// Make sure to check whether returned data will be null.
+				String titleOfPage = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+				String urlOfPage = intent.getStringExtra(Intent.EXTRA_TEXT);
+				Uri imageUriOfPage = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+		}
 
 		//AsyncTask.execute(new Runnable() {
 		//	@Override

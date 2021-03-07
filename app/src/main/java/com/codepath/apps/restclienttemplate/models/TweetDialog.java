@@ -56,11 +56,12 @@ public class TweetDialog extends DialogFragment {
         void onFinishTweetDialog(int resultData, Tweet data, String text);
     }
 
-    public static  TweetDialog newInstance(String title, String savedText)
+    public static  TweetDialog newInstance(String title, String savedText, long replyId)
     {
         TweetDialog td = new TweetDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
+        //args.putLong("reply_id", replyId);
         args.putString("savedText", savedText);
         td.setArguments(args);
         return  td;
@@ -94,11 +95,11 @@ public class TweetDialog extends DialogFragment {
         btnTweet = view.findViewById(R.id.btnTweet);
         client = TwitterApp.getRestClient(getContext());
         tvCharcount = view.findViewById(R.id.tvCharcount);
-        tvCharcount.setText(String.format(this.getString(R.string.char_count), 0));
         context = getActivity();
-        replyId = context.getIntent().getLongExtra("reply_id", -1);
+        //replyId = saved.getLong("reply_id", -1);
         textInit = getArguments().getString("savedText", "");
         etCompose.setText(textInit);
+        tvCharcount.setText(String.format(this.getString(R.string.char_count), etCompose.length()));
 
         etCompose.addTextChangedListener(new TextWatcher() {
             @Override

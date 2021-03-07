@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.DefensiveURLSpan;
 import com.codepath.apps.restclienttemplate.models.Tweet;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.PlayerView;
 
 import org.parceler.Parcels;
 
@@ -111,6 +106,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             ivProfileImage = itemView.findViewById(R.id.ivProfile);
             tvBody = itemView.findViewById(R.id.tvBody);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
@@ -135,6 +131,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.bindHolder
                 public void onClick(View view) {
                     Intent i = new Intent(context, ComposeActivity.class);
                     i.putExtra("reply_id", tweet.id);
+                    ((TimelineActivity)context).ShowDialog();
                     ((Activity)context).startActivityForResult(i, TimelineActivity.REQUEST_CODE);
                 }
             });

@@ -12,11 +12,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -58,7 +56,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
         setContentView(R.layout.activity_timeline);
 
 
-        prefs = this.getSharedPreferences("com.codepath.apps.restclienttemplate", Context.MODE_PRIVATE);
+
+            prefs = this.getSharedPreferences("com.codepath.apps.restclienttemplate", Context.MODE_PRIVATE);
          Log.i("NAME", getApplicationContext().getPackageName());
 
         client = TwitterApp.getRestClient(this);
@@ -76,7 +75,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
                 populateHomeTimeline();
             }
         });
-
 
         rvTweets = findViewById(R.id.rvTweets);
         fbCompose = findViewById(R.id.fbCompose);
@@ -104,7 +102,25 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
             }
         });
 
+
+
         populateHomeTimeline();
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+
+                // Make sure to check whether returned data will be null.
+                String titleOfPage = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                String urlOfPage = intent.getStringExtra(Intent.EXTRA_TEXT);
+                prefs.edit().putString("tweetText", titleOfPage + "\n" + urlOfPage).apply();
+                ShowDialog();
+            }
+        }
     }
 
     public void ShowDialog()
@@ -165,6 +181,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDialog.T
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            prefs.edit().putString("tweetText", "").apply();
                             Toast.makeText(context, "Dismissed", Toast.LENGTH_SHORT).show();
                         }
                     });
