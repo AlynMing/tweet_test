@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDialog;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -29,7 +31,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements TweetDialog.TweetDialogListener {
 
     public static final String TAG = "TimelineActivity";
     public static final int TRUNCATED = 0;
@@ -91,12 +93,46 @@ public class TimelineActivity extends AppCompatActivity {
         fbCompose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, ComposeActivity.class);
-                startActivityForResult(i, REQUEST_CODE);
+                ShowDialog();
             }
         });
 
         populateHomeTimeline();
+    }
+
+    public void ShowDialog()
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        TweetDialog td = TweetDialog.newInstance("Compose");
+        td.show(fm, "fragment_edit_name");
+    }
+
+    @Override
+    public void onFinishTweetDialog(int resultCode, Tweet data)
+    {
+        if(resultCode == -1)
+        {
+            tweets.add(0, data);
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    LoginActivity.tweetDao.insertUser(data.user);
+                    LoginActivity.tweetDao.insertTweet(data);
+                }
+            });
+            adapter.notifyItemInserted(0);
+            rvTweets.smoothScrollToPosition(0);
+        }
+        if(resultCode == 1)
+        {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "no internet", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 
 
